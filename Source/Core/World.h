@@ -1,5 +1,7 @@
 #pragma once
 
+#include "entt.hpp"
+
 class ComponentManager;
 class ResourceManager;
 class Game;
@@ -9,7 +11,7 @@ namespace sf
 	class RenderWindow;
 }
 
-class Actor;
+class Entity;
 
 class World
 {
@@ -24,22 +26,18 @@ public:
 
 	virtual void Draw(sf::RenderWindow* pWindow);
 
-	Actor* GetActorByName(std::string_view name);
+	Entity CreateEntity(const std::string& name = std::string());
 
-	ComponentManager* GetComponentManager();
 	ResourceManager* GetResourceManager();
 
 	Game* GetGame() { return m_pGame; }
 
-	//template<typename T>
-	//T* GetManager()
-	//{
-	//	m_pGame->GetManager<T>();
-	//}
+	sf::Sprite* sprite = nullptr;
 
 private:
+	entt::registry m_Registry;
 
 	Game* m_pGame = nullptr;
 
-	std::map<std::string_view, Actor*> m_Actors;
+	friend class Entity;
 };

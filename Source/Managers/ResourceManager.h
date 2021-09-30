@@ -26,9 +26,9 @@ public:
 	sf::Texture* GetTexture(const std::string& name);
 
 	void AddTexture(const std::string& name, sf::Texture* pTexture);
+	sf::Sprite& CreateSprite(sf::Texture* pTexture = nullptr);
 
 protected:
 	std::map<std::string, sf::Texture*> m_pTextures;
-	std::map<std::string, sf::Sprite*> m_pSprites;
-	
+	std::vector<sf::Sprite*> m_Sprites;
 };

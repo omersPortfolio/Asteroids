@@ -1,14 +1,18 @@
 #include "GamePCH.h"
 #include "World.h"
-#include "Managers/ComponentManager.h"
 #include "Managers/ResourceManager.h"
 #include "Components/SpriteComponent.h"
 #include "Game.h"
-#include "Actors/Actor.h"
+#include "Components/TransformComponent.h"
+#include "Components/TagComponent.h"
+
+#pragma optimize("", off)
 
 World::World(Game* pGame)
 {
 	m_pGame = pGame;
+
+	sprite = new sf::Sprite();
 }
 
 World::~World()
@@ -17,35 +21,41 @@ World::~World()
 
 void World::Init()
 {
-	Actor* player = new Actor(this, "Player");
-	m_Actors[player->GetName()] = player;
-	player->AddComponent(new SpriteComponent("Ship.png"));
-	
-	
+	Entity entity = CreateEntity("Player");
+	SpriteComponent& spriteComp = entity.AddComponent<SpriteComponent>();
+	spriteComp.m_pTexture = GetResourceManager()->GetTexture("Ship.png");
+	sf::Sprite& pSprite = GetResourceManager()->CreateSprite(spriteComp.m_pTexture);
+	spriteComp.m_pSprite = &pSprite;
+	pSprite.setPosition(sf::Vector2f(50.0f, 360.0f));
 }
 
 void World::Update(float delta)
 {
-	for (const auto& [name, actor] : m_Actors)
-	{
-		actor->Update(delta);
-	}
+	
+	
+	
 }
 
 void World::Draw(sf::RenderWindow* pWindow)
 {
-	GetComponentManager()->Draw(pWindow);
+	auto view = m_Registry.view<SpriteComponent>();
+	for (const auto& entity : view)
+	{
+		SpriteComponent& spriteComp = view.get<SpriteComponent>(entity);
+		pWindow->draw(*spriteComp.m_pSprite);
+	}
 }
 
-Actor* World::GetActorByName(std::string_view name)
+Entity World::CreateEntity(const std::string& name /*= std::string()*/)
 {
-	return m_Actors[name];
+	Entity entity { m_Registry.create(), this };
+	entity.AddComponent<TransformComponent>();
+	auto& tagComp = entity.AddComponent<TagComponent>();
+	tagComp.m_Tag = name.empty() ? "Entity" : name;
+	
+	return entity;
 }
 
-ComponentManager* World::GetComponentManager()
-{
-	return m_pGame->GetComponentManager();
-}
 
 ResourceManager* World::GetResourceManager()
 {

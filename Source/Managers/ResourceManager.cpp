@@ -18,6 +18,11 @@ ResourceManager::~ResourceManager()
 	{
 		delete texture;
 	}
+
+	for (const auto& pSprite : m_Sprites)
+	{
+		delete pSprite;
+	}
 }
 
 void ResourceManager::LoadTexture(const std::string& fileName, sf::Texture* pTexture)
@@ -38,4 +43,16 @@ sf::Texture* ResourceManager::GetTexture(const std::string& name)
 void ResourceManager::AddTexture(const std::string& name, sf::Texture* pTexture)
 {
 	m_pTextures[name] = pTexture;
+}
+
+sf::Sprite& ResourceManager::CreateSprite(sf::Texture* pTexture)
+{
+	sf::Sprite* pSprite = new sf::Sprite();
+
+	if (pTexture)
+		pSprite->setTexture(*pTexture);
+
+	m_Sprites.push_back(pSprite);
+
+	return *pSprite;
 }

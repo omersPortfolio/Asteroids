@@ -30,6 +30,7 @@ project "Asteroids"
 		"Libraries/SFML/include/**.inl",
 		"Libraries/imgui/*.cpp",
 		"Libraries/imgui/*.h",
+		"Libraries/entt/include/entt.hpp",
 		"Libraries/imgui-sfml/**.h"
 	}
 
@@ -38,7 +39,8 @@ project "Asteroids"
 		"Libraries",
 		"Libraries/SFML/include",
 		"Libraries/imgui-sfml",
-		"Libraries/imgui"
+		"Libraries/imgui",
+		"Libraries/entt/include"
 	}
 
 	libdirs

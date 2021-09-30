@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Component.h"
 #include <string>
 
 namespace sf
@@ -9,29 +8,16 @@ namespace sf
 	class Sprite;
 }
 
-class SpriteComponent : public Component
+struct SpriteComponent
 {
-public:
 	SpriteComponent() = default;
-	SpriteComponent(const std::string& textureName);
+	SpriteComponent(sf::Texture* pTexture)
+	: m_pTexture(pTexture) {}
 
-	~SpriteComponent();
+	SpriteComponent(sf::Sprite* pSprite) 
+		: m_pSprite(pSprite) {}
+	SpriteComponent(const SpriteComponent&) = default;
 
-	static const char* GetStaticType() { return "SpriteComponent"; }
-	virtual const char* GetType() override { return GetStaticType(); }
-	static Component* Create() { return new SpriteComponent(); }
-
-	virtual void Init() override;
-
-	sf::Texture* GetTexture() { return m_pTexture; }
-	sf::Sprite* GetSprite() { return m_pSprite; }
-
-	void SetTexture(sf::Texture* pTexture) { m_pTexture = pTexture; }
-	void SetSprite(sf::Sprite* pSprite) { m_pSprite = pSprite; }
-
-protected:
-	sf::Texture* m_pTexture;
-	sf::Sprite* m_pSprite;
-
-	std::string m_Name;
+	sf::Texture* m_pTexture = nullptr;
+	sf::Sprite* m_pSprite = nullptr;
 };

@@ -28,3 +28,12 @@
 #include <imgui-SFML.h>
 
 #include "Core/Log.h"
+#include "Core/Entity.h"
+#include "Core/World.h"
+#include "Core/Application.h"
+#include "Core/GameApplication.h"
+#include "Math/vec2.h"
+#include "Math/Random.h"
+#include "Math/Math.h"
+
+#include <entt/include/entt.hpp>
