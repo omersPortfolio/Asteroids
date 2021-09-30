@@ -29,7 +29,7 @@
 
 #include "Core/Log.h"
 #include "Core/Entity.h"
-#include "Core/World.h"
+//#include "Core/World.h"
 #include "Core/Application.h"
 #include "Core/GameApplication.h"
 #include "Math/vec2.h"

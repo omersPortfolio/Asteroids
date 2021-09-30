@@ -5,59 +5,38 @@
 #include "Game.h"
 #include "Components/TransformComponent.h"
 #include "Components/TagComponent.h"
+#include "Level.h"
 
-#pragma optimize("", off)
-
-World::World(Game* pGame)
+World::World()
 {
-	m_pGame = pGame;
+	m_pResourceManager = new ResourceManager();
 
-	sprite = new sf::Sprite();
+	m_pLevel = new Level(*this);
 }
 
 World::~World()
 {
+	delete m_pResourceManager;
+	delete m_pLevel;
 }
 
 void World::Init()
 {
-	Entity entity = CreateEntity("Player");
-	SpriteComponent& spriteComp = entity.AddComponent<SpriteComponent>();
-	spriteComp.m_pTexture = GetResourceManager()->GetTexture("Ship.png");
-	sf::Sprite& pSprite = GetResourceManager()->CreateSprite(spriteComp.m_pTexture);
-	spriteComp.m_pSprite = &pSprite;
-	pSprite.setPosition(sf::Vector2f(50.0f, 360.0f));
+	m_pLevel->Init();
+	LOG(INFO, "Level initialized...");
 }
 
 void World::Update(float delta)
 {
-	
-	
-	
+	m_pLevel->Update(delta);
 }
 
 void World::Draw(sf::RenderWindow* pWindow)
 {
-	auto view = m_Registry.view<SpriteComponent>();
-	for (const auto& entity : view)
-	{
-		SpriteComponent& spriteComp = view.get<SpriteComponent>(entity);
-		pWindow->draw(*spriteComp.m_pSprite);
-	}
+	m_pLevel->Draw(pWindow);
 }
-
-Entity World::CreateEntity(const std::string& name /*= std::string()*/)
-{
-	Entity entity { m_Registry.create(), this };
-	entity.AddComponent<TransformComponent>();
-	auto& tagComp = entity.AddComponent<TagComponent>();
-	tagComp.m_Tag = name.empty() ? "Entity" : name;
-	
-	return entity;
-}
-
 
 ResourceManager* World::GetResourceManager()
 {
-	return m_pGame->GetResourceManager();
+	return m_pResourceManager;
 }

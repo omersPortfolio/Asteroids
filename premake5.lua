@@ -31,7 +31,8 @@ project "Asteroids"
 		"Libraries/imgui/*.cpp",
 		"Libraries/imgui/*.h",
 		"Libraries/entt/include/entt.hpp",
-		"Libraries/imgui-sfml/**.h"
+		"Libraries/imgui-sfml/**.h",
+		"Libraries/rapidjson/include/rapidjson/**.h"
 	}
 
 	includedirs {
@@ -40,7 +41,7 @@ project "Asteroids"
 		"Libraries/SFML/include",
 		"Libraries/imgui-sfml",
 		"Libraries/imgui",
-		"Libraries/entt/include"
+		"Libraries/entt/include",
 	}
 
 	libdirs
@@ -79,5 +80,27 @@ project "Asteroids"
 	pchheader "GamePCH.h"
 	pchsource "Source/WinMain.cpp"
 
-	filter "files:Framework/Libraries/imgui/*.cpp"
+	filter "files:Libraries/imgui/*.cpp"
 		flags { "NoPCH" }
+
+	filter "files:Catch2/src/catch2/**.cpp"
+		flags { "NoPCH" }
+
+
+--project "UnitTest"
+--	kind		"ConsoleApp"
+--	location	"build/UnitTest"
+--	cppdialect	"C++17"
+--
+--	includedirs {
+--		"Libraries/Catch2/src",
+--	}
+--
+--	files {
+--		"Libraries/Catch2/src/catch2/**.hpp",
+--		"Libraries/Catch2/src/catch2/**.cpp",
+--	}
+--
+--	links {
+--		"Asteroids"
+--	}

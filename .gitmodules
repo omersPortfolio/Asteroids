@@ -1,0 +1,6 @@
+[submodule "Libraries/rapidjson"]
+	path = Libraries/rapidjson
+	url = https://github.com/Tencent/rapidjson.git
+[submodule "Libraries/Catch2"]
+	path = Libraries/Catch2
+	url = https://github.com/catchorg/Catch2.git

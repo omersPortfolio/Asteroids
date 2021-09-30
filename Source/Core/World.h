@@ -5,6 +5,7 @@
 class ComponentManager;
 class ResourceManager;
 class Game;
+class Level;
 
 namespace sf
 {
@@ -16,7 +17,7 @@ class Entity;
 class World
 {
 public:
-	World(Game* pGame);
+	World();
 	~World();
 
 public:
@@ -26,18 +27,13 @@ public:
 
 	virtual void Draw(sf::RenderWindow* pWindow);
 
-	Entity CreateEntity(const std::string& name = std::string());
-
 	ResourceManager* GetResourceManager();
 
-	Game* GetGame() { return m_pGame; }
-
-	sf::Sprite* sprite = nullptr;
-
 private:
-	entt::registry m_Registry;
 
-	Game* m_pGame = nullptr;
+	ResourceManager* m_pResourceManager = nullptr;
+
+	Level* m_pLevel = nullptr;
 
 	friend class Entity;
 };

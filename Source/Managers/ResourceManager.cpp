@@ -29,7 +29,7 @@ void ResourceManager::LoadTexture(const std::string& fileName, sf::Texture* pTex
 {
 	if (!pTexture->loadFromFile(initialPath + fileName))
 	{
-		LOG(ERROR, "Could not load texture file '%s'", fileName);
+		LOG(ERROR, "Could not load texture file '%s'", fileName.c_str());
 		return;
 	}
 	AddTexture(fileName.c_str(), pTexture);
