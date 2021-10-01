@@ -1,6 +1,9 @@
 #pragma once
 
-
+namespace sf
+{
+	class RenderWindow;
+}
 
 namespace fw
 {
@@ -19,6 +22,8 @@ namespace fw
 		virtual void Draw(sf::RenderWindow* window) = 0;
 
 		ResourceManager* GetResourceManager() { return m_pResourceManager; }
+
+		sf::RenderWindow* GetWindow();
 
 		Level* GetLevel() { return m_pLevel; }
 

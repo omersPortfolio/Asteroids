@@ -44,6 +44,8 @@ void Game::Update(float deltaTime)
 
 	m_pLevel->Update(deltaTime);
 
+	//LOG(WARNING, "Mouse:%f, %f", Input::GetMouseX(GetWindow()), Input::GetMouseY(GetWindow()));
+
 	fw::Log::Update();
 }
 

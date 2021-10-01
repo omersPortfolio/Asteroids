@@ -25,6 +25,8 @@ namespace fw
 		//bool IsKeyDown();
 		//bool IsMouseButtonDown(int id); etc
 
+		sf::RenderWindow* GetWindow() { return m_pWindow; }
+
 	private:
 
 		sf::RenderWindow* m_pWindow = nullptr;

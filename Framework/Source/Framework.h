@@ -9,6 +9,7 @@
 #include "Core/Level.h"
 #include "Core/FWCore.h"
 #include "Core/GameCore.h"
+#include "Input/Input.h"
 #include "Core/Entity.h"
 #include "Math/Vector.h"
 #include "Math/Random.h"

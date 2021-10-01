@@ -1,5 +1,6 @@
 #include "FrameworkPCH.h"
 #include "GameCore.h"
+#include "FWCore.h"
 
 namespace fw
 {
@@ -12,4 +13,10 @@ namespace fw
 	{
 
 	}
+
+	sf::RenderWindow* GameCore::GetWindow()
+	{
+		return m_pFramework->GetWindow();
+	}
+
 }
