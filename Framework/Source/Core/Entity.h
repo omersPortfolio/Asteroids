@@ -37,6 +37,7 @@ public:
 	}
 
 	bool IsValid() const { return m_EntityHandle != entt::null; }
+	entt::entity GetHandle() { return m_EntityHandle; }
 
 private:
 	entt::entity m_EntityHandle = entt::null;
