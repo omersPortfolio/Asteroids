@@ -1,2 +1,2 @@
-# C++ Asteroid clone with ECS system. 
+# Building a Framework with ECS for games in C++ 
 --- Ongoing ---
