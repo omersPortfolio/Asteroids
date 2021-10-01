@@ -1,12 +1,18 @@
 #include "FrameworkPCH.h"
 #include "Level.h"
 
+#include "Components/PlayerComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Components/TagComponent.h"
 #include "Components/TransformComponent.h"
 #include "Entity.h"
-#include "Managers/ResourceManager.h"
 #include "GameCore.h"
+#include "Managers/ResourceManager.h"
+
+namespace
+{
+	static constexpr const char* player = "Player";
+}
 
 namespace fw
 {
@@ -40,6 +46,9 @@ namespace fw
 		entity.AddComponent<TransformComponent>();
 		auto& tagComp = entity.AddComponent<TagComponent>();
 		tagComp.m_Tag = name.empty() ? "Entity" : name;
+
+		if (name == player)
+			entity.AddComponent<PlayerComponent>();
 
 		return entity;
 	}

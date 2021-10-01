@@ -2,6 +2,7 @@
 
 #include "FrameworkPCH.h"
 
+#include "Components/PlayerComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Components/TransformComponent.h"
 #include "Components/TagComponent.h"

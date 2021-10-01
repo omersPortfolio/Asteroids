@@ -20,7 +20,7 @@ public:
 	template<typename T>
 	T* GetComponent()
 	{
-		return m_pLevel->m_Registry.get<T>(m_EntityHandle);
+		return &m_pLevel->m_Registry.get<T>(m_EntityHandle);
 	}
 
 	template<typename T>

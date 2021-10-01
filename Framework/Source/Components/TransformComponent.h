@@ -2,12 +2,6 @@
 
 #include "Math/Vector.h"
 
-namespace sf
-{
-	class Texture;
-	class Sprite;
-}
-
 struct TransformComponent
 {
 	TransformComponent() = default;

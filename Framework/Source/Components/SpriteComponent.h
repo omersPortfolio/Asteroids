@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 namespace sf
 {
 	class Texture;
@@ -11,13 +9,14 @@ namespace sf
 struct SpriteComponent
 {
 	SpriteComponent() = default;
-	SpriteComponent(sf::Texture* pTexture)
-	: m_pTexture(pTexture) {}
+	SpriteComponent(const char* name)
+	: m_TextureName(name) {}
 
 	SpriteComponent(sf::Sprite* pSprite) 
 		: m_pSprite(pSprite) {}
 	SpriteComponent(const SpriteComponent&) = default;
 
 	sf::Texture* m_pTexture = nullptr;
+	const char* m_TextureName = nullptr;
 	sf::Sprite* m_pSprite = nullptr;
 };

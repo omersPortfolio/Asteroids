@@ -29,6 +29,12 @@ namespace fw
 			return m_Registry.view<T>();
 		}
 
+		template<typename T1, typename T2>
+		auto View()
+		{
+			return m_Registry.view<T1, T2>();
+		}
+
 		GameCore* GetGameCore() { return m_pGameCore; }
 
 		void LoadFromFile(const std::string& filename);

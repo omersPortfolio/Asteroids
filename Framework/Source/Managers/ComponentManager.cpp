@@ -4,6 +4,7 @@
 #include "Components/SpriteComponent.h"
 #include "Core/GameCore.h"
 #include "Core/Level.h"
+#include "Components/TransformComponent.h"
 
 namespace fw
 {
@@ -19,7 +20,13 @@ namespace fw
 
 	void ComponentManager::Update(float deltaTime)
 	{
-		
+		auto view = m_pLevel->View<TransformComponent, SpriteComponent>();
+		for (const auto& entity : view)
+		{
+			SpriteComponent& spriteComp = view.get<SpriteComponent>(entity);
+			TransformComponent& transformComp = view.get<TransformComponent>(entity);
+			spriteComp.m_pSprite->setPosition(sf::Vector2f(transformComp.m_Position.x, transformComp.m_Position.y));
+		}
 	}
 
 	fw::Level* ComponentManager::GetLevel()
@@ -34,7 +41,7 @@ namespace fw
 		{
 			SpriteComponent& spriteComp = view.get<SpriteComponent>(entity);
 			pWindow->draw(*spriteComp.m_pSprite);
-		}
+		}	
 	}
 
 }

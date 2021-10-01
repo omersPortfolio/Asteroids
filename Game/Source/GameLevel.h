@@ -15,4 +15,7 @@ public:
 	virtual void Draw(sf::RenderWindow* pWindow) override;
 
 	Game* GetGame();
+
+private:
+	void OnSpriteComponentAdded(entt::registry& registry, entt::entity entity);
 };

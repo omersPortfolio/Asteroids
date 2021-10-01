@@ -183,9 +183,6 @@ namespace fw
 
 } // fw
 
-
-// Debug Config only
-#ifdef _DEBUG
 /*
 *	Logs a message in the Log Window.
 *	Example Usage 1: LOG(INFO, "PlayerPos: %f, %f \n", pPlayer->GetPosition().x, pPlayer->GetPosition().y);
@@ -205,5 +202,3 @@ namespace fw
 
 // Logs the message as YELLOW.
 #define WARNING			   fw::LogType::Warning
-
-#endif // _DEBUG
