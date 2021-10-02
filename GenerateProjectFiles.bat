@@ -1,2 +1,4 @@
-premake5 vs2019
-pause
+@echo off
+call premake5.exe vs2019
+popd
+PAUSE
