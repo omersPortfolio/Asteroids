@@ -1,4 +1,7 @@
-build
+Build
 .vs
 Intermediate
 Projects
+/3rdParty/imgui/examples
+/3rdParty/glfw/examples
+.sln

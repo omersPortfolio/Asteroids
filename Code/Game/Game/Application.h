@@ -1,13 +1,13 @@
 #pragma once
 
-#include <Framework/Application.h>
+#include <Saz/Application.h>
 
 namespace imgui
 {
 	class Log;
 }
 
-class Application final : public fw::Application
+class Application final : public Saz::Application
 {
 public:
 	Application();
@@ -16,9 +16,9 @@ public:
 	virtual void Init() override;
 	virtual void Destroy() override;
 	virtual void Register() override;
-	virtual void Update(float deltaTime) override;
+	virtual void Update() override;
 	
 private:
-	imgui::Log* m_Log = nullptr;
+	//imgui::Log* m_Log = nullptr;
 };
 

@@ -1,9 +1,8 @@
-
 -----------------------------------------------------
 -- Workspace
 -----------------------------------------------------
-workspace "Project"
-	architecture "x86_64"
+workspace "Saz"
+	architecture "x64"
 	configurations	{ "Debug", "Release" }
 	platforms		{ "x64" }
 	dependson { "ZERO_CHECK" }
@@ -11,23 +10,32 @@ workspace "Project"
 	language "C++"
 	cppdialect	"C++17"
 
-	targetdir "%{wks.location}/Build/%{prj.name}/%{cfg.buildcfg}_%{cfg.platform}/"
-	objdir "%{wks.location}/Intermediate/%{prj.name}/%{cfg.buildcfg}_%{cfg.platform}/"
-
+	outputdir = "%{cfg.buildcfg}_%{cfg.platform}"
+	
+	targetdir ("%{wks.location}/Build/%{prj.name}/" .. outputdir )
+	objdir ("%{wks.location}/Intermediate/%{prj.name}/" .. outputdir)
+	
 	disablewarnings { "26812" }
 
 	filter "Debug"
-		defines { "_DEBUG", "T_DEBUG", "T_ENABLE_ASSERTS" }
+		defines { "_DEBUG", "SAZ_DEBUG", "SAZ_ENABLE_ASSERTS" }
 		optimize "Off"
 		runtime "Debug"
+		--buildoptions "/MDd"
 		symbols "On"
 	filter "Release"
-		defines { "NDEBUG", "T_RELEASE" }
+		defines { "NDEBUG", "SAZ_RELEASE" }
 		optimize "Speed"
 		runtime "Release"
+		--buildoptions "/MD"
 		symbols "Off"
 	filter {} -- disable the filter
 
+	defines
+	{
+		"_CRT_SECURE_NO_WARNINGS",
+		
+	}
 
 	files 
 	{ 
@@ -42,18 +50,18 @@ workspace "Project"
 		{ ["/"] = { "**premake5.lua" } },
 	}
 
-	filter "files:%{wks.location}/3rdParty/**.cpp"
-		flags { "NoPCH" }
-
-	include "Code/Framework/premake5.lua"
+	include "Code/Saz/premake5.lua"
 	include "Code/Core/premake5.lua"
-	include "Code/ImGui/premake5.lua"
 	include "Code/Game/premake5.lua"
+	include "3rdParty/glad/premake5.lua"
+	include "3rdParty/imgui/premake5.lua"
+	include "3rdParty/GLFW/premake5.lua"
 
 	group "ut"
 		include "Code/Core_ut/premake5.lua"
-		include "Code/Framework_ut/premake5.lua"
+		include "Code/Saz_ut/premake5.lua"
 	group ""
+	
 
 project "ZERO_CHECK"
 	kind "ConsoleApp"

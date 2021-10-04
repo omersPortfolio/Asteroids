@@ -4,8 +4,10 @@
 
 int main(int agrc, char* argv[])
 {
-	Application app;
-	app.Run(agrc, argv);
+	auto app = Saz::CreateApplication();
+	app->Run(agrc, argv);
+
+	delete app;
 
 	return EXIT_SUCCESS;
 }
