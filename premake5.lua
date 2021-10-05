@@ -70,5 +70,5 @@ project "ZERO_CHECK"
 	files { "%{wks.location}/premake5.lua" }
 
 	-- fix the path
-	buildcommands { "cd D:/Dev/MyFramework & call GenerateProjectFiles.bat" }
+	buildcommands { "cd %{wks.location} & call GenerateProjectFiles.bat" }
 	buildoutputs { "unused.txt" }

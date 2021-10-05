@@ -1,63 +1,27 @@
 #include "GamePCH.h"
 
 #include "Application.h"
+
 #include <Saz/TransformComponent.h>
-#include <Saz/PlayerComponent.h>
+#include <Saz/InputComponent.h>
 #include <Saz/SpriteComponent.h>
 
-class ExampleLayer : public Saz::Layer
-{
-public:
-	ExampleLayer()
-		:Layer("Example")
-
-	{
-
-	}
-
-	void OnUpdate() override
-	{
-		/*HZ_INFO("ExampleLayer::Update");*/
-
-		if (Saz::Input::IsKeyPressed(SAZ_KEY_TAB))
-			SPD_TRACE("Tab key is pressed (poll)!");
-	}
-
-	virtual void OnImGuiRender() override
-	{
-		ImGui::Begin("Test");
-		ImGui::Text("Hello world");
-		ImGui::End();
-	}
-
-	void OnEvent(Saz::Event& event) override
-	{
-		if (event.GetEventType() == Saz::EventType::KeyPressed)
-		{
-			Saz::KeyPressedEvent& e = (Saz::KeyPressedEvent&)event;
-			if (e.GetKeyCode() == SAZ_KEY_TAB)
-				SPD_TRACE("Tab key is pressed! (event)!");
-			SPD_TRACE("{0}", (char)e.GetKeyCode());
-		}
-	}
-};
+#include <SFML/Graphics/Texture.hpp>
+#include <entt/entt.hpp>
 
 Application::Application()
 {
-	PushLayer(new ExampleLayer());
-	PushOverlay(new Saz::ImGuiLayer());
+	
 }
 
 Application::~Application()
 {
-	//delete m_Log;
+	
 }
 
 void Application::Init()
 {
-	Saz::Application::Init();
-	
-	//m_Log = new imgui::Log();
+	Saz::Application::Init();	
 }
 
 void Application::Destroy()
@@ -74,16 +38,49 @@ void Application::Update()
 {
 	Saz::Application::Update();
 
-	//imgui::Log::Update();
-
-	/*if (ImGui::Button("Create Entity"))
+	auto& registry = m_EntityWorld.m_Registry;
+	if (ImGui::Button("Create Entity with Sprite and Transform"))
 	{
-		auto player = m_EntityWorld.CreateEntity();
-		TransformComponent& transformComp = m_EntityWorld.AddComponent<TransformComponent>(player);
-		transformComp.m_Position = vec2(Math::RandomFloatInRange(50.0f, 1200.0f), Math::RandomFloatInRange(50.0f, 600.0f));;
-		m_EntityWorld.AddComponent<PlayerComponent>(player);
-		m_EntityWorld.AddComponent<SpriteComponent>(player);
-	}*/
+		ecs::Entity entity = m_EntityWorld.CreateEntity();
+		sf::Texture* texture = new sf::Texture();
+		if (texture->loadFromFile("D:/Dev/Saz/Code/Game/Data/Textures/Ship.png"))
+		{
+			SpriteComponent& spriteComp = m_EntityWorld.AddComponent<SpriteComponent>(entity);
+			spriteComp.m_Texture = texture;
+			TransformComponent& transformComp = m_EntityWorld.AddComponent<TransformComponent>(entity);
+			transformComp.m_Position = vec2(600.0f, 360.0f);
+		}
+	}
+
+	if (ImGui::Button("Add Input"))
+	{
+		const auto view = registry.view<TransformComponent, SpriteComponent>();
+		for (const ecs::Entity& entity : view)
+		{
+			if (!m_EntityWorld.HasComponent<Input::InputComponent>(entity))
+				m_EntityWorld.AddComponent<Input::InputComponent>(entity);
+		}
+	}
+
+	const auto view = registry.view<TransformComponent, SpriteComponent, Input::InputComponent>();
+	for (const ecs::Entity& entity : view)
+	{
+		const auto& spriteComponent = view.get<SpriteComponent>(entity);
+		auto& transformComponent = view.get<TransformComponent>(entity);
+		auto& inputComponent = view.get<Input::InputComponent>(entity);
+		vec2& pos = transformComponent.m_Position;
+
+		if (inputComponent.IsKeyHeld(Input::EKeyboard::A))
+			pos.x -= 1.f;
+		if (inputComponent.IsKeyHeld(Input::EKeyboard::D))
+			pos.x += 1.f;
+		if (inputComponent.IsKeyHeld(Input::EKeyboard::W))
+			pos.y += 1.f;
+		if (inputComponent.IsKeyHeld(Input::EKeyboard::S))
+			pos.y -= 1.f;
+	}
+
+	ImGui::EndFrame();
 }
 
 Saz::Application* Saz::CreateApplication()

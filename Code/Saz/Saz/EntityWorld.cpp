@@ -1,6 +1,7 @@
 #include "SazPCH.h"
 #include "EntityWorld.h"
-#include "System.h"
+
+#include "Saz/System.h"
 
 namespace ecs
 {

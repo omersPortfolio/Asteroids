@@ -2,7 +2,7 @@
 
 #include <Saz/TypeId.h>
 
-inline bool ecs::EntityWorld::IsAlive(const Entity& entity) const
+inline bool ecs::EntityWorld::IsAlive(const ecs::Entity& entity) const
 {
 	return m_Registry.valid(entity);
 }
@@ -12,21 +12,21 @@ inline auto ecs::EntityWorld::CreateEntity()->ecs::Entity
 	return m_Registry.create();
 }
 
-inline void ecs::EntityWorld::DestroyEntity(const Entity& entity)
+inline void ecs::EntityWorld::DestroyEntity(const ecs::Entity& entity)
 {
 	m_Registry.destroy(entity);
 }
 
 template<class TComponent>
-bool ecs::EntityWorld::HasComponent(const Entity& entity) const
+bool ecs::EntityWorld::HasComponent(const ecs::Entity& entity) const
 {
 	return m_Registry.has<TComponent>(entity);
 }
 
 template<class TComponent, typename... TArgs>
-auto ecs::EntityWorld::GetComponent(const Entity& entity)->TComponent&
+auto ecs::EntityWorld::GetComponent(const ecs::Entity& entity)->TComponent&
 {
-	assert(m_Registry.has<TComponent>(entity));
+	SAZ_ASSERT(m_Registry.has<TComponent>(entity));
 	return m_Registry.get<TComponent>(entity);
 }
 
@@ -40,21 +40,21 @@ void ecs::EntityWorld::RegisterComponent()
 		core::ToTypeId<TComponent>()
 	};
 
-	//assert(!core::Contains(m_ComponentEntries, [&entry](const auto& lhs) { return lhs.m_TypeId == entry.m_TypeId; }));
+	
 	m_ComponentEntries.push_back(entry);
 }
 
 template<class TComponent, typename... TArgs>
-auto ecs::EntityWorld::AddComponent(const Entity& entity, TArgs&&... args)->TComponent&
+auto ecs::EntityWorld::AddComponent(const ecs::Entity& entity, TArgs&&... args)->TComponent&
 {
-	assert(!m_Registry.has<TComponent>(entity));
+	SAZ_ASSERT(!m_Registry.has<TComponent>(entity), "Attempting to add a component that already exists on the Entity. Investigate!");
 	return m_Registry.emplace<TComponent>(entity, std::forward<TArgs>(args)...);
 }
 
 template<class TComponent>
-void ecs::EntityWorld::RemoveComponent(const Entity& entity)
+void ecs::EntityWorld::RemoveComponent(const ecs::Entity& entity)
 {
-	assert(m_Registry.has<TComponent>(entity));
+	SAZ_ASSERT(m_Registry.has<TComponent>(entity), "Attempting to remove a component that does not exist on the Entity!");
 	m_Registry.remove<TComponent>(entity);
 }
 
@@ -69,7 +69,7 @@ TSystem& ecs::EntityWorld::GetSystem()
 			return entry.m_TypeId == typeId;
 		});
 
-	assert(result != m_SystemEntries.end());
+	SAZ_ASSERT(result != m_SystemEntries.end());
 	return *dynamic_cast<TSystem*>(result->m_System);
 }
 
@@ -84,8 +84,7 @@ void ecs::EntityWorld::RegisterSystem(TArgs&&... args)
 		core::ToTypeId<TSystem>()
 		, new TSystem(std::forward<TArgs>(args)...)
 	};
-	entry.m_System->m_pWorld = this;
+	entry.m_System->m_World = this;
 
-	//assert(!core::Contains(m_SystemEntries, [&entry](const auto& lhs) { return lhs.m_TypeId == entry.m_TypeId; }));
 	m_SystemEntries.push_back(entry);
 }

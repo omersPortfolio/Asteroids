@@ -1,10 +1,20 @@
 #pragma once
 
 #include <Saz/EntityWorld.h>
-#include "Window.h"
-#include "Events/Event.h"
-#include "Events/ApplicationEvent.h"
-#include "LayerStack.h"
+#include <Saz/WindowBase.h>
+
+namespace Saz
+{
+	namespace glfw
+	{
+		class Window;
+	}
+
+	namespace sfml
+	{
+		class Window;
+	}
+}
 
 namespace Saz
 {
@@ -18,11 +28,7 @@ namespace Saz
 
 		void Run(int argc, char* argv[]);
 
-		void OnEvent(Event& e);
-
 		inline static Application& Get() { return *s_Instance; }
-
-		inline Window& GetWindow() { return *m_Window; }
 
 	protected:
 		virtual void Init();
@@ -30,17 +36,11 @@ namespace Saz
 		virtual void Destroy();
 		virtual void Update();
 
-		void PushLayer(Layer* layer);
-		void PushOverlay(Layer* layer);
-
 		const ecs::EntityWorld& GetWorld();
-
-		bool OnWindowClosed(WindowCloseEvent& e);
 
 
 	protected:
-		std::unique_ptr<Window> m_Window;
-		LayerStack m_LayerStack;
+		Saz::sfml::Window* m_SFMLWindow = nullptr;
 
 		ecs::EntityWorld m_EntityWorld;
 

@@ -17,6 +17,6 @@ namespace ecs
 		virtual void Update() {};
 
 	protected:
-		ecs::EntityWorld* m_pWorld = nullptr;
+		ecs::EntityWorld* m_World = nullptr;
 	};
 }

@@ -28,25 +28,25 @@ namespace ecs
 
 		void Update();
 
-		bool IsAlive(const Entity& entity) const;
+		bool IsAlive(const ecs::Entity& entity) const;
 
 		auto CreateEntity()->ecs::Entity;
-		void DestroyEntity(const Entity& entity);
+		void DestroyEntity(const ecs::Entity& entity);
 
 		template<class TComponent>
-		bool HasComponent(const Entity& entity) const;
+		bool HasComponent(const ecs::Entity& entity) const;
 
 		template<class TComponent, typename... TArgs>
-		auto GetComponent(const Entity& entity) -> TComponent&;
+		auto GetComponent(const ecs::Entity& entity) -> TComponent&;
 
 		template<class TComponent>
 		void RegisterComponent();
 
 		template<class TComponent, typename... TArgs>
-		auto AddComponent(const Entity& entity, TArgs&&... args) -> TComponent&;
+		auto AddComponent(const ecs::Entity& entity, TArgs&&... args) -> TComponent&;
 
 		template<class TComponent>
-		void RemoveComponent(const Entity& entity);
+		void RemoveComponent(const ecs::Entity& entity);
 
 		template<class TSystem>
 		auto GetSystem()->TSystem&;

@@ -1,7 +1,7 @@
 #pragma once
 
 #ifdef SAZ_PLATFORM_WINDOWS
-	#if HZ_DYNAMIC_LINK
+	#if SAZ_DYNAMIC_LINK
 		#ifdef SAZ_BUILD_DLL
 			#define SAZ_API __declspec(dllexport)
 		#else
@@ -21,8 +21,8 @@
 #endif
 
 #ifdef SAZ_ENABLE_ASSERTS
-	#define SAZ_ASSERT(x, ...) { if(!x) { SPD_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak(); } }
-	#define SAZ_CORE_ASSERT(x, ...) { if(!x) { SPD_CORE_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define SAZ_ASSERT(x, ...) { if(!x) { SAZ_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define SAZ_CORE_ASSERT(x, ...) { if(!x) { SAZ_CORE_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
 	#define SAZ_ASSERT(x, ...)
 	#define SAZ_CORE_ASSERT(x, ...)

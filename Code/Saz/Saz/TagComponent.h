@@ -9,5 +9,5 @@ struct TagComponent
 		: m_Tag(tag) {}
 
 
-	std::string m_Tag;
+	String m_Tag;
 };
