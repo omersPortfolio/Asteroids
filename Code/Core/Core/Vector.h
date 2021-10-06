@@ -13,6 +13,9 @@ public:
 	vec2(float nx, float ny) { x = nx; y = ny; }
 	//virtual ~vec2() {}
 
+	static const vec2 Zero() { return vec2(0.0f, 0.0f); }
+	static const vec2 One() { return vec2(1.0f, 1.0f); }
+
 	static const vec2 Right() { return vec2(1.0f, 0.0f); }
 	static const vec2 Up() { return vec2(0.0f, 1.0f); }
 

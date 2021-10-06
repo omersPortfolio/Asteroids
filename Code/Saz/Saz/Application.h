@@ -5,6 +5,8 @@
 
 namespace Saz
 {
+	class ResourceManager;
+
 	namespace glfw
 	{
 		class Window;
@@ -16,6 +18,11 @@ namespace Saz
 	}
 }
 
+namespace imgui
+{
+	class Log;
+}
+
 namespace Saz
 {
 	class Window;
@@ -24,7 +31,7 @@ namespace Saz
 	{
 	public:
 		Application();
-		~Application();
+		virtual ~Application();
 
 		void Run(int argc, char* argv[]);
 
@@ -37,14 +44,18 @@ namespace Saz
 		virtual void Update();
 
 		const ecs::EntityWorld& GetWorld();
+		Saz::ResourceManager* GetResourceManager() { return m_pResourceManager; }
 
 
 	protected:
 		Saz::sfml::Window* m_SFMLWindow = nullptr;
+		Saz::ResourceManager* m_pResourceManager;
 
 		ecs::EntityWorld m_EntityWorld;
 
 		bool m_Running = true;
+
+		imgui::Log* m_ImGuiLog = nullptr;
 
 	private:
 		static Application* s_Instance;

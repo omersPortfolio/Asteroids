@@ -190,21 +190,9 @@ namespace imgui
 *	Logs a message in the Log Window.
 *	Example Usage 1: LOG(INFO, "PlayerPos: %f, %f \n", pPlayer->GetPosition().x, pPlayer->GetPosition().y);
 *	Example Usage 2: LOG(WARNING, "E key is pressed");													*/
-#define LOG(x, ...)		   imgui::Log::AddType(x), imgui::log.AddLog(__VA_ARGS__), imgui::Log::NextLine()
+#define IMGUI_LOG_INFO(...)			imgui::Log::AddType(imgui::LogType::Info), imgui::log.AddLog(__VA_ARGS__), imgui::Log::NextLine()
+#define IMGUI_LOG_WARNING( ...)		imgui::Log::AddType(imgui::LogType::Warning), imgui::log.AddLog(__VA_ARGS__), imgui::Log::NextLine()
+#define IMGUI_LOG_ERROR(...)		imgui::Log::AddType(imgui::LogType::Error), imgui::log.AddLog(__VA_ARGS__), imgui::Log::NextLine()
 //#else
 //#define LOG(x, ...)
 //#endif
-
-// Clears the Log Window.
-#define CLEAR_LOG		   imgui::log.Clear()
-
-//---------  Log Types  ----------//
-// Logs the message as WHITE. Used for casual logs.
-#define INFO			   imgui::LogType::Info
-
-// Logs the message as RED.
-#undef ERROR
-#define ERROR			   imgui::LogType::Error
-
-// Logs the message as YELLOW.
-#define WARNING			   imgui::LogType::Warning

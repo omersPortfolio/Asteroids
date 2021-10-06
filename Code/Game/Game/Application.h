@@ -11,7 +11,7 @@ class Application final : public Saz::Application
 {
 public:
 	Application();
-	virtual ~Application();
+	virtual ~Application() override;
 
 	virtual void Init() override;
 	virtual void Destroy() override;
@@ -19,6 +19,5 @@ public:
 	virtual void Update() override;
 	
 private:
-	//imgui::Log* m_Log = nullptr;
 };
 

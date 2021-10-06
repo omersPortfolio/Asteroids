@@ -4,4 +4,4 @@
 
 
 template<typename Key, typename Value>
-using HashMap = std::map<Key, Value>;
+using Map = std::map<Key, Value>;

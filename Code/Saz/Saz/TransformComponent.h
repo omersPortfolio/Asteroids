@@ -2,13 +2,12 @@
 
 #include <Core/Vector.h>
 
-struct TransformComponent
+namespace component
 {
-	TransformComponent() = default;
-	TransformComponent(const vec2& position)
-	: m_Position(position) {}
-
-	TransformComponent(const TransformComponent&) = default;
-
-	vec2 m_Position;
-};
+	struct TransformComponent
+	{
+		vec2 m_Position = vec2::Zero();
+		vec2 m_Rotation = vec2::Zero();
+		vec2 m_Scale = vec2::One();
+	};
+}

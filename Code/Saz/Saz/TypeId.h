@@ -2,12 +2,12 @@
 
 #include <entt/entt.hpp>
 
-namespace core
+namespace Saz
 {
 	using TypeId = entt::id_type;
 
 	template<typename Type>
-	constexpr core::TypeId ToTypeId();
+	constexpr Saz::TypeId ToTypeId();
 }
 
 #include "TypeId.inl"

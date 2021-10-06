@@ -2,15 +2,18 @@
 #include "Application.h"
 
 #include "Saz/EntityWorld.h"
-#include "Saz/GLFW/Window.h"
+#include "Saz/InputComponent.h"
 #include "Saz/InputSystem.h"
 #include "Saz/RenderSystem.h"
+#include "Saz/ResourceManager.h"
 #include "Saz/SFML/Window.h"
+#include "Saz/LevelSystem.h"
 #include "Saz/SpriteComponent.h"
-#include "Saz/TagComponent.h"
+#include "Saz/NameComponent.h"
 #include "Saz/TransformComponent.h"
 
 #include <GLFW/glfw3.h>
+#include "LevelComponent.h"
 
 namespace Saz
 {
@@ -25,16 +28,13 @@ namespace Saz
 	{
 		SAZ_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
+
 		spd::Log::Init();
+		m_ImGuiLog = new imgui::Log();
 
-		/*{
-			glfwInit();
-			Saz::WindowProps windowProps;
-			windowProps.m_Title = "GLFW Window";
-			windowProps.m_Size = ivec2(1280, 720);
-
-			m_GLFWWindow = new Saz::glfw::Window(windowProps);
-		}*/
+		// #todo Create all textures with a single call here.
+		m_pResourceManager = new Saz::ResourceManager();
+		
 		
 		{
 			Saz::WindowProps windowProps ;
@@ -47,30 +47,32 @@ namespace Saz
 	Application::~Application()
 	{
 		delete m_SFMLWindow;
-		//delete m_GLFWWindow;
+		delete m_ImGuiLog;
+		delete m_pResourceManager;
 		glfwTerminate();
 	}
 
 	void Application::Init()
 	{
-		//m_GLFWWindow->Init();
 		m_SFMLWindow->Init();
 		m_EntityWorld.Init();
 	}
 
 	void Application::Register()
 	{
-		m_EntityWorld.RegisterComponent<SpriteComponent>();
-		m_EntityWorld.RegisterComponent<TagComponent>();
-		m_EntityWorld.RegisterComponent<TransformComponent>();
+		m_EntityWorld.RegisterComponent<component::SpriteComponent>();
+		m_EntityWorld.RegisterComponent<component::NameComponent>();
+		m_EntityWorld.RegisterComponent<component::TransformComponent>();
+		m_EntityWorld.RegisterComponent<component::InputComponent>();
+		m_EntityWorld.RegisterComponent<component::LevelComponent>();
 
 		m_EntityWorld.RegisterSystem<ecs::RenderSystem>(*m_SFMLWindow);
 		m_EntityWorld.RegisterSystem<ecs::InputSystem>(*m_SFMLWindow);
+		m_EntityWorld.RegisterSystem<ecs::LevelSystem>(*m_pResourceManager);
 	}
 
 	void Application::Destroy()
 	{
-		//m_GLFWWindow->Destroy();
 		m_SFMLWindow->Destroy();
 		m_EntityWorld.Destroy();
 	}
@@ -78,6 +80,7 @@ namespace Saz
 	void Application::Update()
 	{
 		m_EntityWorld.Update();
+		m_ImGuiLog->Update();
 	}
 
 	void Application::Run(int argc, char* argv[])
@@ -87,10 +90,6 @@ namespace Saz
 
 		while (m_Running)
 		{
-			/*m_GLFWWindow->Update();
-			if (m_GLFWWindow->ShouldClose())
-				break;*/
-
 			m_SFMLWindow->Update();
 			if (m_SFMLWindow->ShouldClose())
 				break;

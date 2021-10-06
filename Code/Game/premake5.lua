@@ -17,6 +17,13 @@ project "Game"
 			"Game/**.inl" } },
 	}
 
+	files
+	{
+		"%{wks.location}/Data/Textures/*.png",
+		"%{wks.location}/Data/Textures/*.jpg",
+		"%{wks.location}/Data/Scenes/*.scene",
+	}
+
 	includedirs {
 		"%{wks.location}/3rdParty/",
 		"%{wks.location}/3rdParty/spdlog/include/",

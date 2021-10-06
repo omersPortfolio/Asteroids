@@ -35,10 +35,10 @@ namespace ecs
 		m_SFMLWindow.GatherKeyboard(m_KeyboardCurrent);
 		m_SFMLWindow.GatherMouse(m_MouseCurrent, mouseDelta, mousePos);
 		
-		auto& view = registry.view<Input::InputComponent>();
+		auto& view = registry.view<component::InputComponent>();
 		for (const ecs::Entity& entity : view)
 		{
-			auto& component = view.get<Input::InputComponent>(entity);
+			auto& component = view.get<component::InputComponent>(entity);
 			component.m_KeyboardPrevious = m_KeyboardPrevious;
 			component.m_KeyboardCurrent = m_KeyboardCurrent;
 			component.m_MousePrevious = m_MousePrevious;

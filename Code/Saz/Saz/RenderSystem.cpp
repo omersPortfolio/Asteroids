@@ -4,8 +4,6 @@
 #include "Saz/SpriteComponent.h"
 #include "Saz/TransformComponent.h"
 
-#include "GLFW/Window.h"
-
 #include "SFML/Window.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Texture.hpp>
@@ -22,12 +20,6 @@ namespace ecs
 
 	RenderSystem::~RenderSystem()
 	{
-		auto& registry = m_World->m_Registry;
-		for (const ecs::Entity& view : registry.view<SpriteComponent>())
-		{
-			const auto& spriteComponent = registry.get<SpriteComponent>(view);
-			delete spriteComponent.m_Texture;
-		}
 	}
 
 	void RenderSystem::Init()
@@ -44,21 +36,21 @@ namespace ecs
 	{
 		auto& registry = m_World->m_Registry;
 
-		const auto spriteView = registry.view<SpriteComponent, TransformComponent>();
+		const auto spriteView = registry.view<component::SpriteComponent, component::TransformComponent>();
 		for (const ecs::Entity& view : spriteView)
 		{
-			const auto& spriteComponent = spriteView.get<SpriteComponent>(view);
-			const auto& transformComponent = spriteView.get<TransformComponent>(view);
+			const auto& spriteComponent = spriteView.get<component::SpriteComponent>(view);
+			const auto& transformComponent = spriteView.get<component::TransformComponent>(view);
 
-			if (!spriteComponent.m_Texture)
-				continue;
+			const sf::Texture& texture = spriteComponent.m_Texture;
 
 			sf::Sprite sprite;
-			sprite.setTexture(*spriteComponent.m_Texture);
+			sprite.setTexture(spriteComponent.m_Texture);
 			sprite.setPosition(transformComponent.m_Position.x, transformComponent.m_Position.y);
+			sprite.setScale(transformComponent.m_Scale.x, transformComponent.m_Scale.x * -1.0f);
+			sprite.setOrigin(texture.getSize().x / 2, texture.getSize().y / 2);
 
 			m_SFMLWindow.m_Texture.draw(sprite);
 		}
 	}
-
 }

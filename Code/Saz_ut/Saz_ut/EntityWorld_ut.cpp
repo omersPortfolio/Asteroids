@@ -21,7 +21,7 @@ namespace
 		template<typename Type>
 		bool IsRegistered()
 		{
-			constexpr core::TypeId typeId = core::ToTypeId<Type>();
+			constexpr Saz::TypeId typeId = Saz::ToTypeId<Type>();
 			if constexpr (std::is_base_of<ecs::System, Type>::value)
 			{
 				auto result = std::find_if(m_SystemEntries.begin(), m_SystemEntries.end(),

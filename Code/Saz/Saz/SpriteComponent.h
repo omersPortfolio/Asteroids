@@ -2,11 +2,11 @@
 
 #include <SFML/Graphics/Texture.hpp>
 
-struct SpriteComponent
+namespace component
 {
-	SpriteComponent() = default;
+	struct SpriteComponent
+	{
+		sf::Texture m_Texture;
+	};
+}
 
-	SpriteComponent(const SpriteComponent&) = default;
-
-	sf::Texture* m_Texture;
-};

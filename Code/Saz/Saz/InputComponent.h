@@ -2,7 +2,7 @@
 
 #include <Core/Input.h>
 
-namespace Input
+namespace component
 {
 	struct InputComponent
 	{

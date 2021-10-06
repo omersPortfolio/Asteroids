@@ -26,7 +26,7 @@ bool ecs::EntityWorld::HasComponent(const ecs::Entity& entity) const
 template<class TComponent, typename... TArgs>
 auto ecs::EntityWorld::GetComponent(const ecs::Entity& entity)->TComponent&
 {
-	SAZ_ASSERT(m_Registry.has<TComponent>(entity));
+	//SAZ_ASSERT(HasComponent<TComponent>(entity));
 	return m_Registry.get<TComponent>(entity);
 }
 
@@ -37,7 +37,7 @@ void ecs::EntityWorld::RegisterComponent()
 
 	ComponentEntry entry =
 	{
-		core::ToTypeId<TComponent>()
+		Saz::ToTypeId<TComponent>()
 	};
 
 	
@@ -61,7 +61,7 @@ void ecs::EntityWorld::RemoveComponent(const ecs::Entity& entity)
 template<class TSystem>
 TSystem& ecs::EntityWorld::GetSystem()
 {
-	constexpr core::TypeId typeId = core::ToTypeId<TSystem>();
+	constexpr Saz::TypeId typeId = Saz::ToTypeId<TSystem>();
 
 	auto result = std::find_if(m_SystemEntries.begin(), m_SystemEntries.end(),
 		[&typeId](const SystemEntry& entry)
@@ -69,7 +69,7 @@ TSystem& ecs::EntityWorld::GetSystem()
 			return entry.m_TypeId == typeId;
 		});
 
-	SAZ_ASSERT(result != m_SystemEntries.end());
+	SAZ_ASSERT((result != m_SystemEntries.end()), "Attempting to access an invalid system or it has not been registered yet!");
 	return *dynamic_cast<TSystem*>(result->m_System);
 }
 
@@ -81,7 +81,7 @@ void ecs::EntityWorld::RegisterSystem(TArgs&&... args)
 
 	SystemEntry entry =
 	{
-		core::ToTypeId<TSystem>()
+		Saz::ToTypeId<TSystem>()
 		, new TSystem(std::forward<TArgs>(args)...)
 	};
 	entry.m_System->m_World = this;

@@ -11,12 +11,12 @@ namespace ecs
 
 	struct ComponentEntry
 	{
-		const core::TypeId m_TypeId = 0;
+		const Saz::TypeId m_TypeId = 0;
 	};
 
 	struct SystemEntry
 	{
-		const core::TypeId m_TypeId = 0;
+		const Saz::TypeId m_TypeId = 0;
 		ecs::System* m_System = nullptr;
 	};
 
