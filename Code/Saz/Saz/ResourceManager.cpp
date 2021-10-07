@@ -1,9 +1,13 @@
 #include "SazPCH.h"
 
 #include "ResourceManager.h"
+
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 
 #include <entt/entt.hpp>
+#include <SFML/Graphics/Shape.hpp>
 
 namespace
 {
@@ -20,7 +24,10 @@ namespace Saz
 
 	ResourceManager::~ResourceManager()
 	{
-		
+		for (const auto& [name, shape] : m_Shapes)
+		{
+			delete shape;
+		}
 	}
 
 	const sf::Texture& ResourceManager::GetTexture(const String& name)
@@ -37,6 +44,29 @@ namespace Saz
 		if (loadSuccess)
 			m_Textures[filename] = texture;
 
-		return texture;
+		return m_Textures[filename];
 	}
+
+	const sf::Shape* ResourceManager::GetShape(const String& name)
+	{
+		return m_Shapes[name];
+	}
+
+	sf::RectangleShape* ResourceManager::CreateRectangle(const String& name, vec2 size, sf::Color color)
+	{
+		sf::RectangleShape* rectangle = new sf::RectangleShape(sf::Vector2f(size.x, size.y));
+		rectangle->setFillColor(color);
+		m_Shapes[name] = rectangle;
+
+		return rectangle;
+	}
+
+	sf::CircleShape* ResourceManager::CreateCircle(const String& name, float radius, std::size_t pointCount)
+	{
+		sf::CircleShape* circle = new sf::CircleShape(radius, pointCount);
+		m_Shapes[name] = circle;
+
+		return circle;
+	}
+
 }

@@ -19,7 +19,7 @@ namespace ecs
 		virtual void Init() override;
 		virtual void Update() override;
 
-		bool LoadFromFile(const FilePath& path);
+		bool LoadFromFile(const String& filename);
 
 	private:
 		Saz::ResourceManager& m_ResourceManager;

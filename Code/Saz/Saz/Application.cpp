@@ -8,7 +8,7 @@
 #include "Saz/ResourceManager.h"
 #include "Saz/SFML/Window.h"
 #include "Saz/LevelSystem.h"
-#include "Saz/SpriteComponent.h"
+#include "Saz/RenderComponents.h"
 #include "Saz/NameComponent.h"
 #include "Saz/TransformComponent.h"
 
@@ -63,6 +63,7 @@ namespace Saz
 		m_EntityWorld.RegisterComponent<component::SpriteComponent>();
 		m_EntityWorld.RegisterComponent<component::NameComponent>();
 		m_EntityWorld.RegisterComponent<component::TransformComponent>();
+		m_EntityWorld.RegisterComponent<component::RenderComponent>();
 		m_EntityWorld.RegisterComponent<component::InputComponent>();
 		m_EntityWorld.RegisterComponent<component::LevelComponent>();
 

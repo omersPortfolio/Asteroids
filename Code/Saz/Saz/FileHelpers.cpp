@@ -1,7 +1,7 @@
 #include "SazPCH.h"
 #include "FileHelpers.h"
 
-namespace Saz
+namespace Saz::file
 {
 	char* LoadCompleteFile(const char* filename, long* length)
 	{
@@ -27,5 +27,47 @@ namespace Saz
 		}
 
 		return filecontents;
+	}
+
+	void JSONSaveCharArray(WriterType& writer, const char* key, const char* type)
+	{
+		writer.Key(key);
+		writer.String(type);
+	}
+
+	void JSONSaveInt(WriterType& writer, const char* key, int value)
+	{
+		writer.Key(key);
+		writer.Int(value);
+	}
+
+	void JSONSaveVec2(WriterType& writer, const char* key, vec2 value)
+	{
+		writer.Key(key);
+		writer.StartArray();
+		writer.Double(value.x);
+		writer.Double(value.y);
+		writer.EndArray();
+	}
+
+	void JSONLoadInt(rapidjson::Value& object, const char* key, int* value)
+	{
+		assert(value != nullptr);
+
+		if (object.HasMember(key))
+		{
+			*value = object[key].GetInt();
+		}
+	}
+
+	void JSONLoadVec2(rapidjson::Value& object, const char* key, vec2* value)
+	{
+		assert(value != nullptr);
+
+		if (object.HasMember(key))
+		{
+			value->x = object[key][0].GetFloat();
+			value->y = object[key][1].GetFloat();
+		}
 	}
 }

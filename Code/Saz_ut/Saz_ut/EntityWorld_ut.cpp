@@ -1,8 +1,8 @@
 #include <Saz/SazPCH.h>
 #include <Catch2/catch.hpp>
+
 #include <Saz/EntityWorld.h>
 #include <Saz/System.h>
-#include <entt/entt.hpp>
 
 namespace 
 {
@@ -47,12 +47,30 @@ namespace
 }
 TEST_CASE("EntityWorld")
 {
-	SECTION("Components are registered")
+	TestWorld world;
+
+	SECTION("Systems and Components are properly registered")
 	{
-		TestWorld world;
 		CHECK(!world.IsRegistered<ComponentA>());
+		CHECK(!world.IsRegistered<SystemA>());
 
 		world.RegisterComponent<ComponentA>();
 		CHECK(world.IsRegistered<ComponentA>());
+
+		world.RegisterSystem<SystemA>();
+		CHECK(world.IsRegistered<SystemA>());
+	}
+
+	SECTION("Components are added / removed properly")
+	{
+		auto entity = world.CreateEntity();
+		REQUIRE(world.IsAlive(entity));
+		REQUIRE(!world.HasComponent<ComponentA>(entity));
+
+		world.AddComponent<ComponentA>(entity);
+		CHECK(world.HasComponent<ComponentA>(entity));
+
+		world.RemoveComponent<ComponentA>(entity);
+		CHECK(!world.HasComponent<ComponentA>(entity));
 	}
 }

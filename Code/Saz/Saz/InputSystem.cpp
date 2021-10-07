@@ -47,5 +47,4 @@ namespace ecs
 			component.m_MousePosition = mousePos;
 		}
 	}
-
 }

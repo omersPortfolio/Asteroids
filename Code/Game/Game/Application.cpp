@@ -4,13 +4,16 @@
 
 #include <Saz/TransformComponent.h>
 #include <Saz/InputComponent.h>
-#include <Saz/SpriteComponent.h>
+#include <Saz/RenderComponents.h>
 #include <Saz/ResourceManager.h>
 #include <Saz/NameComponent.h>
 #include <Saz/LevelSystem.h>
 #include <Saz/SFML/Window.h>
 
+#include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
+
 #include <entt/entt.hpp>
 
 Application::Application()
@@ -30,9 +33,17 @@ void Application::Init()
 	m_pResourceManager->LoadTexture("Ship.png");
 	m_pResourceManager->LoadTexture("Hollow_Knight.png");
 	m_pResourceManager->LoadTexture("Island.png");
+	m_pResourceManager->LoadTexture("Water.png");
 
+	m_pResourceManager->CreateRectangle("Plane", vec2(100.0f, 10.0f), sf::Color::Blue);
+
+	// #todo: Fix the paths asap
 	ecs::LevelSystem& levelSystem = m_EntityWorld.GetSystem<ecs::LevelSystem>();
-	levelSystem.LoadFromFile(FilePath("D:/Dev/Saz/Data/Scenes/DefaultScene.scene"));
+	levelSystem.LoadFromFile("D:/Dev/Saz/Data/Scenes/DefaultScene.scene");
+
+	auto entity = m_EntityWorld.CreateEntity();
+	sf::RectangleShape* plane = m_pResourceManager->CreateRectangle("Plane", vec2(100.0f, 10.0f), sf::Color::Blue);
+	component::RenderComponent& renderComp = m_EntityWorld.AddComponent<component::RenderComponent>(entity);
 }
 
 void Application::Destroy()
@@ -50,10 +61,9 @@ void Application::Update()
 	Saz::Application::Update();
 
 	auto& registry = m_EntityWorld.m_Registry;
-	const auto view = registry.view<component::TransformComponent, component::SpriteComponent, component::InputComponent>();
+	const auto view = registry.view<component::TransformComponent, component::InputComponent>();
 	for (const ecs::Entity& entity : view)
 	{
-		const auto& spriteComponent = view.get<component::SpriteComponent>(entity);
 		auto& transformComponent = view.get<component::TransformComponent>(entity);
 		auto& inputComponent = view.get<component::InputComponent>(entity);
 		vec2& pos = transformComponent.m_Position;

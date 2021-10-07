@@ -41,3 +41,8 @@
 #include "Saz/TypeId.h"
 #include "Saz/SpdLog.h"
 #include "Saz/ImGui/ImGuiLog.h"
+
+#include <rapidjson/document.h>
+#include <rapidjson/filewritestream.h>
+#include <rapidjson/writer.h>
+#include <rapidjson/prettywriter.h>

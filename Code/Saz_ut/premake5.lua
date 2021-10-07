@@ -1,27 +1,27 @@
 project "Saz_ut"
 	kind "ConsoleApp"
 	dependson { "Core", "Saz" }
-	location "%{wks.location}/Projects/Framework_ut"
+	location "%{wks.location}/Projects/Saz_ut"
 
 	defines { "T_UNIT_TEST" }
 
 	vpaths 
 	{ 
 		{ ["Source/*"] = {  
-			"Framework_ut/**.h", 
-			"Framework_ut/**.cpp", 
-			"Framework_ut/**.inl" } },
+			"Saz_ut/**.h", 
+			"Saz_ut/**.cpp", 
+			"Saz_ut/**.inl" } },
 	}
 
 	includedirs 
 	{
 		"%{wks.location}/3rdParty/",
 		"%{wks.location}/3rdParty/spdlog/include/",
+		"%{wks.location}/3rdParty/SFML/include/",
 		"%{wks.location}/3rdParty/glad/include/",
 		"%{wks.location}/3rdParty/glad/src/",
 		"%{wks.location}/Code/Core/",
 		"%{wks.location}/Code/Saz/",
-		--"%{wks.location}/3rdParty/entt/include/",
 	}
 
 	libdirs

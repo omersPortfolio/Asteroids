@@ -3,16 +3,14 @@
 
 #include "Saz/RenderSystem.h"
 #include "Saz/ResourceManager.h"
-#include "Saz/SpriteComponent.h"
+#include "Saz/RenderComponents.h"
 #include "Saz/TransformComponent.h"
 #include "Saz/LevelComponent.h"
+#include "Saz/NameComponent.h"
+#include "Saz/FileHelpers.h"
+#include "Saz/InputComponent.h"
 
 #include <entt/entt.hpp>
-#include <rapidjson/rapidjson.h>
-#include <rapidjson/document.h>
-#include "NameComponent.h"
-#include "FileHelpers.h"
-#include "InputComponent.h"
 
 namespace ecs
 {	
@@ -37,11 +35,15 @@ namespace ecs
 
 	}
 
-	bool LevelSystem::LoadFromFile(const FilePath& path)
+	bool LevelSystem::LoadFromFile(const String& filename)
 	{
-		const char* jsonSceneFile = Saz::LoadCompleteFile(path.u8string().c_str(), nullptr);
+		FilePath relativePath = filename;
+		const char* jsonSceneFile = Saz::file::LoadCompleteFile(relativePath.u8string().c_str(), nullptr);
 		if (!jsonSceneFile)
+		{
+			SAZ_CORE_ERROR("File not found with path: {0}", relativePath.u8string());
 			return false;
+		}
 
 		rapidjson::Document loadedScene;
 		rapidjson::ParseResult ok = loadedScene.Parse(jsonSceneFile);
@@ -56,8 +58,8 @@ namespace ecs
 
 			{
 				component::LevelComponent& levelComponent = m_World->AddComponent<component::LevelComponent>(entity);
-				levelComponent.m_Name = path.stem().string();
-				levelComponent.m_Path = path.string();
+				levelComponent.m_Name = relativePath.stem().string();
+				levelComponent.m_Path = relativePath.string();
 			}
 
 			{
@@ -74,6 +76,7 @@ namespace ecs
 				}
 			}
 		
+			// #todo: clean this up
 			if (obj.HasMember("Components"))
 			{
 				for (rapidjson::Value& component : obj["Components"].GetArray())
@@ -83,23 +86,45 @@ namespace ecs
 					{
 						component::TransformComponent& transformComponent = m_World->AddComponent<component::TransformComponent>(entity);
 						if (component.HasMember("Pos"))
-						{
-							const float x = component["Pos"][0].GetFloat();
-							const float y = component["Pos"][1].GetFloat();
-							transformComponent.m_Position = vec2(x, y);
-						}
+							Saz::file::JSONLoadVec2(component, "Pos", &transformComponent.m_Position);
 						if (component.HasMember("Scale"))
-						{
-							const float x = component["Scale"][0].GetFloat();
-							const float y = component["Scale"][1].GetFloat();
-							transformComponent.m_Scale = vec2(x, y);
-						}
+							Saz::file::JSONLoadVec2(component, "Scale", &transformComponent.m_Scale);
 					}
 					if (componentType == "SpriteComponent")
 					{
 						component::SpriteComponent& spriteComponent = m_World->AddComponent<component::SpriteComponent>(entity);
 						const String& textureName = component["TextureName"].GetString();
 						spriteComponent.m_Texture = m_ResourceManager.GetTexture(textureName);
+					}
+					if (componentType == "RenderComponent")
+					{
+						component::RenderComponent& renderComp = m_World->AddComponent<component::RenderComponent>(entity);
+						size_t b = sizeof(renderComp);
+						StringView shapeType = component["ShapeType"].GetString();
+						if (shapeType == "Rectangle")
+						{
+							if (component.HasMember("Size"))
+							{
+								float x = component["Size"][0].GetFloat();
+								float y = component["Size"][1].GetFloat();
+
+								renderComp.m_RectangleShape = m_ResourceManager.CreateRectangle("Rectangle", vec2(x, y));
+								const String& textureName = component["TextureName"].GetString();
+								renderComp.m_RectangleShape->setTexture(&m_ResourceManager.GetTexture(textureName));
+							}							
+						}
+						else if (shapeType == "Circle")
+						{
+							const float radius = component["Radius"].GetFloat();
+							const int pointCount = component["PointCount"].GetInt();
+							const String& textureName = component["TextureName"].GetString();
+
+							sf::CircleShape* circleShape = renderComp.m_CircleShape;
+							circleShape = m_ResourceManager.CreateCircle("Circle", radius, pointCount);
+							circleShape->setTexture(&m_ResourceManager.GetTexture(textureName));
+							circleShape->setFillColor(sf::Color::Blue);
+							circleShape->setOrigin(radius / 2, radius / 2);
+						}
 					}
 				}
 			}		

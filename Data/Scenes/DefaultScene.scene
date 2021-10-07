@@ -20,5 +20,18 @@
 					"Type": "SpriteComponent",
 					"TextureName": "Island.png"
 			}]
+		}, {
+			"Name": "Background",
+			"Components": [{
+					"Type": "TransformComponent",
+					"Pos": [ 640.0, 360.0 ],
+					"Scale": [1.0, 1.0]
+				}, {
+					"Type": "RenderComponent",
+					"ShapeType": "Circle",
+					"Radius": 50.0,
+					"PointCount": 4,
+					"TextureName": "Water.png"
+			}]		
 		}]
 }
